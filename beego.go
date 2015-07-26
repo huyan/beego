@@ -277,6 +277,23 @@ func Run(params ...string) {
 	BeeApp.Run()
 }
 
+func RunInit(params ...string) {
+	if len(params) > 0 && params[0] != "" {
+		strs := strings.Split(params[0], ":")
+		if len(strs) > 0 && strs[0] != "" {
+			HttpAddr = strs[0]
+		}
+		if len(strs) > 1 && strs[1] != "" {
+			HttpPort, _ = strconv.Atoi(strs[1])
+		}
+	}
+	initBeforeHttpRun()
+
+	if EnableAdmin {
+		go beeAdminApp.Run()
+	}
+}
+
 func initBeforeHttpRun() {
 	// if AppConfigPath not In the conf/app.conf reParse config
 	if AppConfigPath != filepath.Join(AppPath, "conf", "app.conf") {
